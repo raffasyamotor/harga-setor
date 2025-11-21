@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Raffasya Motor - Daftar Harga</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+</head>
+
+<body class="bg-gray-100 min-h-screen">
+  <header class="bg-gradient-to-r from-blue-800 to-blue-600 text-white text-center py-4 shadow">
+    <h1 class="text-3xl font-bold tracking-wide">RAFFASYA MOTOR</h1>
+    <p class="text-sm opacity-80 mt-1">Daftar Harga Mobil Terbaru</p>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 py-6">
+    <!-- FILTER -->
+    <div class="mb-3 flex flex-col md:flex-row gap-3">
+      <input id="searchInput" type="text" placeholder="Cari merk/type mobil..."
+        class="flex-1 border rounded px-4 py-2 shadow-sm focus:ring focus:ring-blue-200" />
+
+      <select id="sortPrice"
+        class="w-full md:w-52 border rounded px-4 py-2 shadow-sm focus:ring focus:ring-blue-200">
+        <option value="">Urutkan Harga</option>
+        <option value="asc">Harga Terendah</option>
+        <option value="desc">Harga Tertinggi</option>
+      </select>
+
+      <button id="resetBtn"
+        class="bg-red-500 text-white rounded px-4 py-2 shadow-sm hover:bg-red-600 transition">Reset</button>
+    </div>
+
+    <!-- Info Total Unit + Rekap Status -->
+    <div id="totalInfo" class="mb-6 text-gray-700 font-medium"></div>
+
+    <!-- LIST MOBIL -->
+    <div id="mobilList" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"></div>
+
+    <div id="loading" class="flex justify-center items-center my-8 hidden">
+      <div class="w-12 h-12 border-4 border-blue-500 border-dashed rounded-full animate-spin"></div>
+    </div>
+
+    <div id="endMessage" class="text-center text-gray-500 hidden py-4">Semua data sudah dimuat.</div>
+  </main>
+
+  <!-- MODAL -->
+  <div id="detailModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center transition-opacity duration-300">
+    <div class="bg-white rounded-lg shadow-lg w-full max-w-2xl relative overflow-hidden animate-fadeIn">
+      <div id="modalContent" class="relative"></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+<script>
+  const apiURL = "https://script.google.com/macros/s/AKfycbyr5QyBndUGqeyKgpwRwDDp8g7LnBbvMdpEGadYPWHRtlph9MmwZXgNwP487NtwioZM/exec";
+
+  let allData = [], filteredData = [];
+  let currentSort = "", searchText = "";
+  let perLoad = 6, currentIndex = 0, isLoading = false;
+
+  const listContainer = document.getElementById("mobilList");
+  const loading = document.getElementById("loading");
+  const endMessage = document.getElementById("endMessage");
+  const searchInput = document.getElementById("searchInput");
+  const sortPrice = document.getElementById("sortPrice");
+  const resetBtn = document.getElementById("resetBtn");
+  const detailModal = document.getElementById("detailModal");
+  const modalContent = document.getElementById("modalContent");
+  const totalInfo = document.getElementById("totalInfo");
+
+  const F = {
+    get(obj, ...keys) {
+      for (const k of keys) {
+        if (obj && obj[k] !== undefined && obj[k] !== null && String(obj[k]).trim() !== "") {
+          return obj[k];
+        }
+      }
+      return "";
+    },
+    normStatus(v) { return String(v || "").trim().toUpperCase(); },
+    parseRupiahToInt(v) {
+      const num = parseInt(String(v || "").replace(/[^\d]/g, ""), 10);
+      return isNaN(num) ? 0 : num;
+    },
+    formatRupiah(v) {
+      const n = this.parseRupiahToInt(v);
+      return n ? "Rp " + n.toLocaleString("id-ID") : "Rp -";
+    }
+  };
+
+  function keyMap(item) {
+    const nama = F.get(item, 'MERK/TYPE MOBIL', 'MERK / TYPE MOBIL', 'MERK & TYPE', 'MERK', 'TYPE', 'NAMA', 'NAMA MOBIL');
+    const nopol = F.get(item, 'NOPOL', 'NO POL', 'PLAT', 'PLAT NOMOR');
+    const harga = F.get(item, 'HARGA JUAL (OTR)', 'HARGA OTR', 'HARGA', 'PRICE');
+    const status = F.normStatus(F.get(item, 'STATUS', 'Status', 'status'));
+    const bulan = F.get(item, 'BULAN', 'Bulan', 'bulan');
+    const linkPhoto = F.get(item, 'LINK PHOTO', 'FOTO', 'PHOTO');
+    const bank = {
+      MUF: F.get(item, 'MUF'),
+      ADIRA: F.get(item, 'ADIRA'),
+      OTO: F.get(item, 'OTO'),
+      SINARMAS: F.get(item, 'SINARMAS'),
+      'CIMB NIAGA': F.get(item, 'CIMB NIAGA', 'CIMB')
+    };
+    const photos = [];
+    if (linkPhoto) photos.push(linkPhoto);
+    for (let j = 1; j <= 10; j++) {
+      const k = `PHOTO ${j}`;
+      const v = F.get(item, k);
+      if (v) photos.push(v);
+    }
+    return { nama, nopol, harga, status, bulan, bank, photos, _raw: item };
+  }
+
+  function applyFilter() {
+    const source = allData.map(keyMap);
+    filteredData = source.filter(x => {
+      const search = searchText.toLowerCase();
+      return x.nama.toLowerCase().includes(search) || x.nopol.toLowerCase().includes(search);
+    });
+
+    if (currentSort) {
+      filteredData.sort((a, b) => {
+        const A = F.parseRupiahToInt(a.harga);
+        const B = F.parseRupiahToInt(b.harga);
+        return currentSort === "asc" ? A - B : B - A;
+      });
+    }
+
+    const ready = filteredData.filter(x => x.status === 'READY').length;
+    const booking = filteredData.filter(x => x.status === 'BOOKING').length;
+
+    totalInfo.innerHTML = `
+      Total Unit: 
+      <span class="text-green-600">READY: ${ready}</span> |
+      <span class="text-blue-600">BOOKING: ${booking}</span> 
+    `;
+
+    listContainer.innerHTML = "";
+    currentIndex = 0;
+    endMessage.classList.add("hidden");
+    loadMore();
+  }
+
+  function loadMore() {
+    if (isLoading) return;
+    isLoading = true;
+    loading.classList.remove("hidden");
+
+    setTimeout(() => {
+      const nextData = filteredData.slice(currentIndex, currentIndex + perLoad);
+      if (nextData.length === 0 && currentIndex === 0) {
+        listContainer.innerHTML = `<div class="col-span-full text-center text-gray-500 py-10">Tidak ada data yang cocok dengan filter/pencarian.</div>`;
+      }
+
+      nextData.forEach((item) => {
+        const card = document.createElement("div");
+        card.className = "bg-white shadow rounded overflow-hidden cursor-pointer hover:scale-105 transition";
+        card.onclick = () => showModal(item);
+
+        const photo = item.photos[0] || "https://via.placeholder.com/400x300?text=No+Image";
+        const statusBadgeClass =
+          item.status === 'READY' ? 'bg-green-100 text-green-700' :
+          item.status === 'BOOKING' ? 'bg-blue-100 text-blue-700' :
+          item.status === 'TERJUAL' ? 'bg-red-100 text-red-700' :
+          'bg-gray-100 text-gray-600';
+
+        card.innerHTML = `
+          <div class="w-full h-48 bg-gray-200 flex items-center justify-center overflow-hidden">
+            <img data-src="${photo}" class="lazy-image w-full h-48 object-cover opacity-0 transition-opacity duration-500" />
+          </div>
+          <div class="p-4">
+            <h2 class="text-lg font-semibold">${item.nama || '-'}</h2>
+            <p class="text-sm text-gray-600">Nopol: ${item.nopol || '-'}</p><br>
+            <p class="text-sm text-gray-600"><strong>MUF</strong><br>${item.bank.MUF || '-'}</p>
+            <p class="text-sm text-gray-600"><strong>ADIRA</strong><br>${item.bank.ADIRA || '-'}</p>
+            <p class="text-sm text-gray-600"><strong>OTO</strong><br>${item.bank.OTO || '-'}</p>
+            <p class="text-sm text-gray-600"><strong>CIMB NIAGA</strong><br>${item.bank['CIMB NIAGA'] || '-'}</p>
+            <p class="text-sm text-gray-600"><strong>SINARMAS</strong><br>${item.bank['SINARMAS'] || '-'}</p>
+            <p class="text-blue-700 font-bold mt-2">
+              ${F.formatRupiah(item.harga)} (OTR)
+              <span class="inline-block px-3 py-1 text-sm font-semibold rounded-full ${statusBadgeClass}">
+                ${item.status || '-'}
+              </span>
+            </p>
+          </div>
+        `;
+        listContainer.appendChild(card);
+      });
+
+      initLazyLoad();
+
+      currentIndex += perLoad;
+      isLoading = false;
+      loading.classList.add("hidden");
+
+      if (currentIndex >= filteredData.length && filteredData.length > 0) {
+        endMessage.classList.remove("hidden");
+      } else {
+        endMessage.classList.add("hidden");
+      }
+    }, 250);
+  }
+
+  // === Lazy load pakai IntersectionObserver ===
+  function initLazyLoad() {
+    const lazyImages = document.querySelectorAll("img.lazy-image");
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const img = entry.target;
+          img.src = img.dataset.src;
+          img.onload = () => img.classList.add("opacity-100");
+          obs.unobserve(img);
+        }
+      });
+    });
+    lazyImages.forEach(img => observer.observe(img));
+  }
+
+  function showModal(item) {
+    const slides = item.photos.map(src => `
+      <div class="swiper-slide flex justify-center items-center bg-gray-50">
+        <img data-src="${src}" class="lazy-image object-contain max-h-[350px] w-auto mx-auto" />
+      </div>
+    `);
+
+    modalContent.innerHTML = `
+      <div class="relative">
+        <button id="closeModalInner" class="absolute top-2 right-2 z-50 text-white bg-black bg-opacity-50 rounded-full w-8 h-8 flex items-center justify-center text-xl">&times;</button>
+        <div class="swiper galeri">
+          <div class="swiper-wrapper">${slides.join("")}</div>
+          <div class="swiper-pagination"></div>
+        </div>
+        <div class="p-4">
+          <h2 class="text-xl font-semibold">${item.nama || '-'}</h2>
+          <p class="text-sm text-gray-600">Nopol: ${item.nopol || '-'}</p>
+          <p class="text-sm text-gray-600">Bulan: ${item.bulan || '-'}</p>
+          <p class="text-blue-700 font-bold mt-2 text-lg">${F.formatRupiah(item.harga)} (OTR)</p>
+        </div>
+      </div>
+    `;
+
+    document.getElementById("closeModalInner").onclick = () => hideModal();
+    detailModal.onclick = (e) => { if (e.target === detailModal) hideModal(); };
+
+    new Swiper('.galeri', { slidesPerView: 1, loop: true, pagination: { el: '.swiper-pagination', clickable: true } });
+    detailModal.classList.remove("hidden");
+    detailModal.classList.add("flex");
+    initLazyLoad();
+  }
+
+  function hideModal() {
+    detailModal.classList.add("hidden");
+    detailModal.classList.remove("flex");
+  }
+
+  // Infinite scroll
+  window.addEventListener('scroll', () => {
+    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 300) {
+      if (currentIndex < filteredData.length) loadMore();
+    }
+  });
+
+  searchInput.addEventListener("input", () => { searchText = searchInput.value.toLowerCase(); applyFilter(); });
+  sortPrice.addEventListener("change", () => { currentSort = sortPrice.value; applyFilter(); });
+  resetBtn.addEventListener("click", () => {
+    searchText = ""; currentSort = "";
+    searchInput.value = ""; sortPrice.value = "";
+    applyFilter();
+  });
+
+  async function fetchData() {
+    loading.classList.remove("hidden");
+    try {
+      const res = await fetch(apiURL);
+      const json = await res.json();
+      const rows = Array.isArray(json) ? json : (json.data || json.records || json.values || []);
+      if (!Array.isArray(rows)) throw new Error("Bentuk data tidak dikenali");
+      allData = rows.slice().reverse();
+    } catch (err) {
+      console.error("Gagal ambil data:", err);
+      listContainer.innerHTML = `<div class="col-span-full text-center text-red-600 py-10">Gagal memuat data dari API.</div>`;
+      allData = [];
+    } finally {
+      applyFilter();
+      loading.classList.add("hidden");
+    }
+  }
+
+  fetchData();
+</script>
+
+  <style>
+    .animate-fadeIn { animation: fadeIn 0.3s ease-in-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: scale(0.9);} to { opacity: 1; transform: scale(1);} }
+  </style>
+</body>
+</html>
