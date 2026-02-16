@@ -132,11 +132,13 @@
 
     const ready = filteredData.filter(x => x.status === 'READY').length;
     const booking = filteredData.filter(x => x.status === 'BOOKING').length;
+     const comingsoon = filteredData.filter(x => x.status === 'COMING SOON').length;
 
     totalInfo.innerHTML = `
       Total Unit: 
       <span class="text-green-600">READY: ${ready}</span> |
-      <span class="text-blue-600">BOOKING: ${booking}</span> 
+      <span class="text-blue-600">BOOKING: ${booking}</span> |
+      <span class="text-blue-600">COMING SOON: ${comingsoon}</span> 
     `;
 
     listContainer.innerHTML = "";
