@@ -27,6 +27,16 @@
         <option value="desc">Harga Tertinggi</option>
       </select>
 
+      <select id="filterStatus"
+  class="w-full md:w-48 border rounded px-4 py-2 shadow-sm focus:ring focus:ring-blue-200">
+  <option value="">Semua Status</option>
+  <option value="READY">READY</option>
+  <option value="BOOKING">BOOKING</option>
+  <option value="TERJUAL">TERJUAL</option>
+  <option value="COMING SOON">COMING SOON</option>
+</select>
+
+
       <button id="resetBtn"
         class="bg-red-500 text-white rounded px-4 py-2 shadow-sm hover:bg-red-600 transition">Reset</button>
     </div>
@@ -55,10 +65,12 @@
 
 <script>
   const apiURL = "https://script.google.com/macros/s/AKfycbyr5QyBndUGqeyKgpwRwDDp8g7LnBbvMdpEGadYPWHRtlph9MmwZXgNwP487NtwioZM/exec";
-
+  
+  let selectedStatus = "";
   let allData = [], filteredData = [];
   let currentSort = "", searchText = "";
   let perLoad = 6, currentIndex = 0, isLoading = false;
+  
 
   const listContainer = document.getElementById("mobilList");
   const loading = document.getElementById("loading");
@@ -69,6 +81,7 @@
   const detailModal = document.getElementById("detailModal");
   const modalContent = document.getElementById("modalContent");
   const totalInfo = document.getElementById("totalInfo");
+  const filterStatus = document.getElementById("filterStatus");
 
   const F = {
     get(obj, ...keys) {
@@ -118,9 +131,18 @@
   function applyFilter() {
     const source = allData.map(keyMap);
     filteredData = source.filter(x => {
-      const search = searchText.toLowerCase();
-      return x.nama.toLowerCase().includes(search) || x.nopol.toLowerCase().includes(search);
-    });
+  const search = searchText.toLowerCase();
+
+  const matchSearch =
+    x.nama.toLowerCase().includes(search) ||
+    x.nopol.toLowerCase().includes(search);
+
+  const matchStatus =
+    selectedStatus === "" || x.status === selectedStatus;
+
+  return matchSearch && matchStatus;
+});
+
 
     if (currentSort) {
       filteredData.sort((a, b) => {
@@ -129,6 +151,11 @@
         return currentSort === "asc" ? A - B : B - A;
       });
     }
+    filterStatus.addEventListener("change", () => {
+  selectedStatus = filterStatus.value;
+  applyFilter();
+});
+
 
     const ready = filteredData.filter(x => x.status === 'READY').length;
     const booking = filteredData.filter(x => x.status === 'BOOKING').length;
@@ -270,11 +297,18 @@
 
   searchInput.addEventListener("input", () => { searchText = searchInput.value.toLowerCase(); applyFilter(); });
   sortPrice.addEventListener("change", () => { currentSort = sortPrice.value; applyFilter(); });
-  resetBtn.addEventListener("click", () => {
-    searchText = ""; currentSort = "";
-    searchInput.value = ""; sortPrice.value = "";
-    applyFilter();
-  });
+ resetBtn.addEventListener("click", () => {
+  searchText = "";
+  currentSort = "";
+  selectedStatus = "";
+
+  searchInput.value = "";
+  sortPrice.value = "";
+  filterStatus.value = "";
+
+  applyFilter();
+});
+
 
   async function fetchData() {
     loading.classList.remove("hidden");
