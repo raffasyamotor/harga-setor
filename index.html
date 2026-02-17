@@ -204,12 +204,12 @@
           <div class="p-4">
             <h2 class="text-lg font-semibold">${item.nama || '-'}</h2>
             <p class="text-sm text-gray-600">Nopol: ${item.nopol || '-'}</p><br>
-            <p class="text-sm text-gray-600"><strong>MUF</strong><br>${item.bank.MUF || 'BELUM ADA HITUNGAN'}</p>
-            <p class="text-sm text-gray-600"><strong>ADIRA</strong><br>${item.bank.ADIRA || 'BELUM ADA HITUNGAN'}</p>
-            <p class="text-sm text-gray-600"><strong>OTO</strong><br>${item.bank.OTO || 'BELUM ADA HITUNGAN'}</p>
-            <p class="text-sm text-gray-600"><strong>CIMB NIAGA</strong><br>${item.bank['CIMB NIAGA'] || 'BELUM ADA HITUNGAN'}</p>
-            <p class="text-sm text-gray-600"><strong>SINARMAS</strong><br>${item.bank['SINARMAS'] || 'BELUM ADA HITUNGAN'}</p>
-             <p class="text-sm text-gray-600"><strong>WOORI FINANCE</strong><br>${item.bank['WOORI FINANCE'] || 'BELUM ADA HITUNGAN'}</p>
+            <p class="text-sm text-gray-600"><strong>MUF</strong><br>${item.bank.MUF || '-'}</p>
+            <p class="text-sm text-gray-600"><strong>ADIRA</strong><br>${item.bank.ADIRA || '-'}</p>
+            <p class="text-sm text-gray-600"><strong>OTO</strong><br>${item.bank.OTO || '-'}</p>
+            <p class="text-sm text-gray-600"><strong>CIMB NIAGA</strong><br>${item.bank['CIMB NIAGA'] || '-'}</p>
+            <p class="text-sm text-gray-600"><strong>SINARMAS</strong><br>${item.bank['SINARMAS'] || '-'}</p>
+             <p class="text-sm text-gray-600"><strong>WOORI FINANCE</strong><br>${item.bank['WOORI FINANCE'] || '-'}</p>
             <p class="text-blue-700 font-bold mt-2">
               ${F.formatRupiah(item.harga)} (OTR)
               <span class="inline-block px-3 py-1 text-sm font-semibold rounded-full ${statusBadgeClass}">
