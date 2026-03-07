@@ -1,517 +1,529 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Sales Hub - Raffasya Motor</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <style>
-    body { 
-      font-family: 'Inter', sans-serif;
-      -webkit-tap-highlight-color: transparent;
-      background-color: #ffffff;
-    }
-    .safe-area-bottom { padding-bottom: env(safe-area-inset-bottom); }
-    .no-scrollbar::-webkit-scrollbar { display: none; }
-    
-    .status-badge {
-      font-size: 10px;
-      padding: 2px 8px;
-      border-radius: 6px;
-      font-weight: 800;
-      text-transform: uppercase;
-    }
-    .READY { background: #eefdf3; color: #15803d; border: 1px solid #bbf7d0; }
-    .BOOKING { background: #eff6ff; color: #1d4ed8; border: 1px solid #dbeafe; }
-    .TERJUAL { background: #fef2f2; color: #b91c1c; border: 1px solid #fee2e2; }
-    
-    .price-tag {
-      background: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 100%);
-    }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Sales Hub - Raffasya Motor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            background-color: #f4f7fa;
+        }
+        .safe-area-bottom { padding-bottom: env(safe-area-inset-bottom); }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        
+        .status-badge {
+            font-size: 9px;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+        .READY { background: #eefdf3; color: #15803d; border: 1px solid #bbf7d0; }
+        .BOOKING { background: #eff6ff; color: #1d4ed8; border: 1px solid #dbeafe; }
+        .TERJUAL { background: #fef2f2; color: #b91c1c; border: 1px solid #fee2e2; }
+        
+        .price-text {
+            background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
 
-    @keyframes slideUp {
-      from { transform: translateY(100%); }
-      to { transform: translateY(0); }
-    }
-    .modal-sheet { animation: slideUp 0.3s cubic-bezier(0, 0, 0.2, 1); }
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+        .modal-sheet { animation: slideUp 0.3s cubic-bezier(0, 0, 0.2, 1); }
 
-    /* Custom Notification Style */
-    #copyToast {
-      position: fixed;
-      bottom: 100px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #1f2937;
-      color: white;
-      padding: 12px 24px;
-      border-radius: 12px;
-      font-size: 12px;
-      font-weight: 600;
-      z-index: 100;
-      opacity: 0;
-      transition: opacity 0.3s;
-      pointer-events: none;
-    }
-
-    /* Swiper Pagination Style Overrides */
-    .swiper-pagination-bullet-active {
-      background: #2563eb !important;
-    }
-  </style>
+        #copyToast {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1f2937;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+    </style>
 </head>
 
 <body class="min-h-screen pb-32">
-  <div id="copyToast">Berhasil disalin ke clipboard!</div>
+    <div id="copyToast">Data unit berhasil disalin!</div>
 
-  <!-- Header Sales -->
-  <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-gray-100 px-5 py-4">
-    <div class="max-w-4xl mx-auto flex justify-between items-center">
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-200">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-          </svg>
+    <!-- Header -->
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-gray-100 px-5 py-4">
+        <div class="max-w-4xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-base font-bold text-gray-900 leading-none">Sales Hub</h1>
+                    <p class="text-[10px] text-gray-400 font-bold mt-1 uppercase tracking-widest">Raffasya Motor</p>
+                </div>
+            </div>
+            <div class="text-right">
+                <div id="lastUpdate" class="text-[11px] font-black text-blue-600">--:--</div>
+                <div id="refreshTimer" class="text-[9px] text-gray-400 font-medium">Syncing...</div>
+            </div>
         </div>
-        <div>
-          <h1 class="text-base font-bold text-gray-900 leading-none">Sales Dashboard</h1>
-          <p class="text-[10px] text-gray-500 font-medium mt-1 uppercase tracking-wider">Raffasya Motor Subang</p>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-4 pt-6">
+        <!-- Pencarian -->
+        <div class="mb-6">
+            <div class="relative group">
+                <input id="searchInput" type="text" placeholder="Cari tipe motor atau plat nomor..."
+                    class="w-full bg-white border-2 border-transparent rounded-2xl pl-12 pr-4 py-4 focus:border-blue-500/20 focus:ring-4 focus:ring-blue-500/5 outline-none transition-all text-sm font-semibold shadow-sm" />
+                <div class="absolute inset-y-0 left-4 flex items-center text-gray-400 group-focus-within:text-blue-500 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </div>
+            </div>
         </div>
-      </div>
-      <div class="text-right">
-        <div id="lastUpdate" class="text-[11px] font-bold text-blue-600">--:--</div>
-        <div id="refreshTimer" class="text-[9px] text-gray-400">Syncing...</div>
-      </div>
+
+        <!-- Ringkasan Status -->
+        <div id="totalInfo" class="flex gap-2 overflow-x-auto no-scrollbar pb-6"></div>
+
+        <!-- DAFTAR UNIT -->
+        <div id="mobilList" class="space-y-6"></div>
+
+        <!-- Loading -->
+        <div id="loading" class="flex flex-col justify-center items-center my-12 hidden">
+            <div class="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+        </div>
+
+        <div id="endMessage" class="text-center text-gray-400 text-[10px] py-12 hidden font-black uppercase tracking-[0.3em]">Katalog Terupdate</div>
+    </main>
+
+    <!-- Navigasi Bawah -->
+    <nav class="fixed bottom-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-lg border-t border-gray-100 safe-area-bottom shadow-2xl">
+        <div class="max-w-lg mx-auto px-8 py-4 flex justify-between items-center">
+            <button id="resetBtn" class="flex flex-col items-center gap-1.5 group">
+                <div class="text-blue-600 group-active:scale-90 transition-transform">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                    </svg>
+                </div>
+                <span class="text-[9px] font-black text-gray-800 tracking-widest uppercase">Katalog</span>
+            </button>
+
+            <div class="relative flex flex-col items-center gap-1.5 group">
+                <select id="filterStatus" class="absolute inset-0 opacity-0 w-full h-full cursor-pointer z-10">
+                    <option value="">Semua Status</option>
+                    <option value="READY">Unit Ready</option>
+                    <option value="BOOKING">Sudah Booking</option>
+                    <option value="TERJUAL">Sudah Terjual</option>
+                </select>
+                <div class="text-gray-400 group-hover:text-blue-600 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                    </svg>
+                </div>
+                <span class="text-[9px] font-black text-gray-400 tracking-widest uppercase">Filter</span>
+            </div>
+
+            <div class="relative flex flex-col items-center gap-1.5 group">
+                <select id="sortPrice" class="absolute inset-0 opacity-0 w-full h-full cursor-pointer z-10">
+                    <option value="">Urut Harga</optiaon>
+                    <option value="asc">Harga Terendah</option>
+                    <option value="desc">Harga Tertinggi</option>
+                </select>
+                <div class="text-gray-400 group-hover:text-blue-600 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+                    </svg>
+                </div>
+                <span class="text-[9px] font-black text-gray-400 tracking-widest uppercase">Urutan</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MODAL DETAIL -->
+    <div id="detailModal" class="fixed inset-0 bg-black/80 z-[60] hidden items-end justify-center">
+        <div class="bg-white rounded-t-[40px] w-full max-w-xl relative overflow-hidden modal-sheet max-h-[95vh] flex flex-col">
+            <div class="absolute top-4 right-5 z-[100]">
+                <button id="closeModalInner" class="bg-white/20 backdrop-blur-md rounded-full w-10 h-10 flex items-center justify-center text-white border border-white/30 shadow-xl">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div id="modalContent" class="overflow-y-auto no-scrollbar"></div>
+        </div>
     </div>
-  </header>
 
-  <main class="max-w-4xl mx-auto px-4 pt-6">
-    <!-- Search Tools -->
-    <div class="mb-6">
-      <div class="relative">
-        <input id="searchInput" type="text" placeholder="Ketik Merk, Tipe, atau Plat..."
-          class="w-full bg-gray-50 border border-gray-100 rounded-xl pl-11 pr-4 py-3.5 focus:bg-white focus:ring-2 focus:ring-blue-500/20 outline-none transition-all text-sm font-medium" />
-        <div class="absolute inset-y-0 left-4 flex items-center text-gray-400">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-          </svg>
-        </div>
-      </div>
-    </div>
-
-    <!-- Inventory Quick Stats -->
-    <div id="totalInfo" class="flex gap-2 overflow-x-auto no-scrollbar pb-6"></div>
-
-    <!-- INVENTORY LIST -->
-    <div id="mobilList" class="space-y-4"></div>
-
-    <!-- Loading -->
-    <div id="loading" class="flex flex-col justify-center items-center my-12 hidden">
-      <div class="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-    </div>
-
-    <div id="endMessage" class="text-center text-gray-400 text-[10px] py-10 hidden font-bold uppercase tracking-widest">Data Terupdate</div>
-  </main>
-
-  <!-- Sales Toolbelt (Bottom Nav) -->
-  <nav class="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-100 safe-area-bottom shadow-[0_-10px_30px_rgba(0,0,0,0.03)]">
-    <div class="max-w-lg mx-auto px-6 py-3 flex justify-between items-center">
-      <!-- Catalog -->
-      <button id="resetBtn" class="flex flex-col items-center gap-1 group">
-        <div class="p-2 rounded-xl text-blue-600 bg-blue-50 group-active:scale-90 transition-transform">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
-          </svg>
-        </div>
-        <span class="text-[10px] font-bold text-gray-600">KATALOG</span>
-      </button>
-
-      <!-- Filter -->
-      <div class="relative flex flex-col items-center gap-1 group">
-        <select id="filterStatus" class="absolute inset-0 opacity-0 w-full h-full cursor-pointer z-10">
-          <option value="">Status</option>
-          <option value="READY">Ready</option>
-          <option value="BOOKING">Booking</option>
-          <option value="TERJUAL">Terjual</option>
-        </select>
-        <div class="p-2 rounded-xl text-gray-400 group-hover:text-blue-600 transition-colors">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
-          </svg>
-        </div>
-        <span class="text-[10px] font-bold text-gray-400">FILTER</span>
-      </div>
-
-      <!-- Sort -->
-      <div class="relative flex flex-col items-center gap-1 group">
-        <select id="sortPrice" class="absolute inset-0 opacity-0 w-full h-full cursor-pointer z-10">
-          <option value="">Urutan</option>
-          <option value="asc">Terendah</option>
-          <option value="desc">Tertinggi</option>
-        </select>
-        <div class="p-2 rounded-xl text-gray-400 group-hover:text-blue-600 transition-colors">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
-          </svg>
-        </div>
-        <span class="text-[10px] font-bold text-gray-400">HARGA</span>
-      </div>
-    </div>
-  </nav>
-
-  <!-- SALES DETAIL SHEET -->
-  <div id="detailModal" class="fixed inset-0 bg-black/70 z-[60] hidden items-end justify-center">
-    <div class="bg-white rounded-t-[32px] w-full max-w-xl relative overflow-hidden modal-sheet max-h-[95vh] flex flex-col shadow-2xl">
-      <!-- Modal Header Overlay -->
-      <div class="absolute top-0 left-0 right-0 h-16 bg-gradient-to-b from-black/40 to-transparent z-[70] pointer-events-none rounded-t-[32px]"></div>
-      
-      <!-- Drag Indicator -->
-      <div class="absolute top-3 left-1/2 -translate-x-1/2 w-12 h-1.5 bg-white/40 rounded-full z-[80]"></div>
-      
-      <!-- Improved Close Button -->
-      <button id="closeModalInner" class="absolute top-4 right-5 z-[100] bg-white/20 hover:bg-white/40 active:scale-90 backdrop-blur-md rounded-full w-9 h-9 flex items-center justify-center text-white transition-all shadow-lg border border-white/30">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12" />
-        </svg>
-      </button>
-
-      <div id="modalContent" class="overflow-y-auto no-scrollbar"></div>
-    </div>
-  </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
 <script>
-  const apiURL = "https://script.google.com/macros/s/AKfycbyr5QyBndUGqeyKgpwRwDDp8g7LnBbvMdpEGadYPWHRtlph9MmwZXgNwP487NtwioZM/exec";
-  const REFRESH_INTERVAL = 59 * 1000; 
-  
-  let selectedStatus = "";
-  let allData = [], filteredData = [];
-  let currentSort = "", searchText = "";
-  let perLoad = 10, currentIndex = 0, isLoading = false;
-  
-  const listContainer = document.getElementById("mobilList");
-  const loading = document.getElementById("loading");
-  const endMessage = document.getElementById("endMessage");
-  const searchInput = document.getElementById("searchInput");
-  const sortPrice = document.getElementById("sortPrice");
-  const resetBtn = document.getElementById("resetBtn");
-  const detailModal = document.getElementById("detailModal");
-  const modalContent = document.getElementById("modalContent");
-  const totalInfo = document.getElementById("totalInfo");
-  const filterStatus = document.getElementById("filterStatus");
-  const lastUpdateEl = document.getElementById("lastUpdate");
-  const refreshTimerEl = document.getElementById("refreshTimer");
-
-  const F = {
-    get(obj, ...keys) {
-      for (const k of keys) {
-        if (obj && obj[k] !== undefined && obj[k] !== null && String(obj[k]).trim() !== "") return obj[k];
-      }
-      return "";
-    },
-    normStatus(v) { return String(v || "").trim().toUpperCase(); },
-    parseRupiahToInt(v) {
-      const num = parseInt(String(v || "").replace(/[^\d]/g, ""), 10);
-      return isNaN(num) ? 0 : num;
-    },
-    formatRupiah(v) {
-      const n = this.parseRupiahToInt(v);
-      return n ? (n/1000000).toFixed(0) + " Jt" : "-";
-    },
-    formatFullRupiah(v) {
-      const n = this.parseRupiahToInt(v);
-      return n ? "Rp " + n.toLocaleString("id-ID") : "Rp -";
-    }
-  };
-
-  function keyMap(item) {
-    const nama = F.get(item, 'MERK/TYPE MOBIL', 'MERK / TYPE MOBIL', 'MERK & TYPE', 'MERK', 'TYPE', 'NAMA', 'NAMA MOBIL');
-    const nopol = F.get(item, 'NOPOL', 'NO POL', 'PLAT', 'PLAT NOMOR');
-    const harga = F.get(item, 'HARGA JUAL (OTR)', 'HARGA OTR', 'HARGA', 'PRICE');
-    const status = F.normStatus(F.get(item, 'STATUS', 'Status', 'status'));
-    const bulan = F.get(item, 'BULAN', 'Bulan', 'bulan');
-    const linkPhoto = F.get(item, 'LINK PHOTO', 'FOTO', 'PHOTO');
-    const bank = {
-      MUF: F.get(item, 'MUF'), ADIRA: F.get(item, 'ADIRA'), OTO: F.get(item, 'OTO'),
-      SINARMAS: F.get(item, 'SINARMAS'), 'WOORI FINANCE': F.get(item, 'WOORI FINANCE'), 'CIMB NIAGA': F.get(item, 'CIMB NIAGA', 'CIMB')
-    };
-    const photos = [];
-    if (linkPhoto) photos.push(linkPhoto);
-    for (let j = 1; j <= 10; j++) {
-      const v = F.get(item, `PHOTO ${j}`);
-      if (v) photos.push(v);
-    }
-    return { nama, nopol, harga, status, bulan, bank, photos };
-  }
-
-  function applyFilter() {
-    const source = allData.map(keyMap);
-    filteredData = source.filter(x => {
-      const search = searchText.toLowerCase();
-      const matchSearch = x.nama.toLowerCase().includes(search) || x.nopol.toLowerCase().includes(search);
-      const matchStatus = selectedStatus === "" || x.status === selectedStatus;
-      return matchSearch && matchStatus;
-    });
-
-    if (currentSort) {
-      filteredData.sort((a, b) => {
-        const A = F.parseRupiahToInt(a.harga);
-        const B = F.parseRupiahToInt(b.harga);
-        return currentSort === "asc" ? A - B : B - A;
-      });
-    }
-
-    const ready = filteredData.filter(x => x.status === 'READY').length;
-    const booking = filteredData.filter(x => x.status === 'BOOKING').length;
-
-    totalInfo.innerHTML = `
-      <div class="READY status-badge shadow-sm">READY ${ready}</div>
-      <div class="BOOKING status-badge shadow-sm">BOOKING ${booking}</div>
-    `;
-
-    listContainer.innerHTML = "";
-    currentIndex = 0;
-    endMessage.classList.add("hidden");
-    loadMore();
-  }
-
-  function loadMore() {
-    if (isLoading) return;
-    isLoading = true;
-    loading.classList.remove("hidden");
-
-    const nextData = filteredData.slice(currentIndex, currentIndex + perLoad);
+    const apiURL = "https://script.google.com/macros/s/AKfycbyr5QyBndUGqeyKgpwRwDDp8g7LnBbvMdpEGadYPWHRtlph9MmwZXgNwP487NtwioZM/exec";
+    const REFRESH_INTERVAL = 59 * 1000; 
     
-    nextData.forEach((item) => {
-      const card = document.createElement("div");
-      card.className = "bg-white rounded-2xl overflow-hidden flex flex-row p-3 gap-4 border border-gray-100 shadow-sm active:bg-gray-50 transition-all cursor-pointer";
-      card.onclick = () => showModal(item);
+    let selectedStatus = "";
+    let allData = [], filteredData = [];
+    let currentSort = "", searchText = "";
+    let perLoad = 10, currentIndex = 0, isLoading = false;
+    
+    const listContainer = document.getElementById("mobilList");
+    const loading = document.getElementById("loading");
+    const endMessage = document.getElementById("endMessage");
+    const searchInput = document.getElementById("searchInput");
+    const sortPrice = document.getElementById("sortPrice");
+    const resetBtn = document.getElementById("resetBtn");
+    const detailModal = document.getElementById("detailModal");
+    const modalContent = document.getElementById("modalContent");
+    const totalInfo = document.getElementById("totalInfo");
+    const filterStatus = document.getElementById("filterStatus");
+    const lastUpdateEl = document.getElementById("lastUpdate");
+    const refreshTimerEl = document.getElementById("refreshTimer");
 
-      const photo = item.photos[0] || "https://via.placeholder.com/400x300?text=Katalog+Motor";
-
-      card.innerHTML = `
-        <div class="w-24 h-24 rounded-xl bg-gray-100 shrink-0 overflow-hidden border border-gray-50">
-          <img data-src="${photo}" class="lazy-image w-full h-full object-cover opacity-0 transition-opacity duration-500" />
-        </div>
-        <div class="flex flex-col justify-between min-w-0 flex-1">
-          <div>
-            <div class="flex justify-between items-start">
-               <h2 class="text-[13px] font-bold text-gray-900 line-clamp-2 uppercase leading-tight pr-2">${item.nama || 'Unit Tanpa Nama'}</h2>
-               <span class="status-badge ${item.status}">${item.status}</span>
-            </div>
-            <p class="text-[10px] font-bold text-gray-400 mt-1 uppercase tracking-tighter">PLAT ${item.nopol || '-'}</p>
-          </div>
-          <div class="flex items-end justify-between">
-            <div class="text-blue-700 font-extrabold text-lg">${F.formatRupiah(item.harga)}</div>
-            <div class="text-[9px] font-bold text-gray-300 uppercase">Detail &rsaquo;</div>
-          </div>
-        </div>
-      `;
-      listContainer.appendChild(card);
-    });
-
-    initLazyLoad();
-    currentIndex += perLoad;
-    isLoading = false;
-    loading.classList.add("hidden");
-
-    if (currentIndex >= filteredData.length && filteredData.length > 0) {
-      endMessage.classList.remove("hidden");
-    }
-  }
-
-  function initLazyLoad() {
-    const lazyImages = document.querySelectorAll("img.lazy-image");
-    const observer = new IntersectionObserver((entries, obs) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const img = entry.target;
-          img.src = img.dataset.src;
-          img.onload = () => img.classList.add("opacity-100");
-          obs.unobserve(img);
+    const F = {
+        get(obj, ...keys) {
+            for (const k of keys) {
+                if (obj && obj[k] !== undefined && obj[k] !== null && String(obj[k]).trim() !== "") return obj[k];
+            }
+            return "";
+        },
+        normStatus(v) { return String(v || "").trim().toUpperCase(); },
+        parseRupiahToInt(v) {
+            const num = parseInt(String(v || "").replace(/[^\d]/g, ""), 10);
+            return isNaN(num) ? 0 : num;
+        },
+        formatFullRupiah(v) {
+            const n = this.parseRupiahToInt(v);
+            return n ? "Rp " + n.toLocaleString("id-ID") : "Rp -";
         }
-      });
-    }, { rootMargin: "200px" });
-    lazyImages.forEach(img => observer.observe(img));
-  }
+    };
 
-  function showModal(item) {
-    const slides = item.photos.map(src => `
-      <div class="swiper-slide h-[300px] bg-gray-100">
-        <img data-src="${src}" class="lazy-image object-cover w-full h-full" />
-      </div>
-    `);
+    function keyMap(item, index) {
+        const nama = F.get(item, 'MERK/TYPE MOBIL', 'MERK / TYPE MOBIL', 'MERK & TYPE', 'MERK', 'TYPE', 'NAMA', 'NAMA MOBIL');
+        const nopol = F.get(item, 'NOPOL', 'NO POL', 'PLAT', 'PLAT NOMOR');
+        const harga = F.get(item, 'HARGA JUAL (OTR)', 'HARGA OTR', 'HARGA', 'PRICE');
+        const status = F.normStatus(F.get(item, 'STATUS', 'Status', 'status'));
+        const bulan = F.get(item, 'BULAN', 'Bulan', 'bulan');
+        const linkPhoto = F.get(item, 'LINK PHOTO', 'FOTO', 'PHOTO');
+        const bank = {
+            MUF: F.get(item, 'MUF'), ADIRA: F.get(item, 'ADIRA'), OTO: F.get(item, 'OTO'),
+            SINARMAS: F.get(item, 'SINARMAS'), 'WOORI': F.get(item, 'WOORI FINANCE'), 'CIMB': F.get(item, 'CIMB NIAGA', 'CIMB')
+        };
+        const photos = [];
+        if (linkPhoto) photos.push(linkPhoto);
+        for (let j = 1; j <= 10; j++) {
+            const v = F.get(item, `PHOTO ${j}`);
+            if (v) photos.push(v);
+        }
+        return { nama, nopol, harga, status, bulan, bank, photos, rawIndex: index };
+    }
 
-    modalContent.innerHTML = `
-      <div class="relative pb-10">
-        <div class="swiper galeriSales">
-          <div class="swiper-wrapper">${slides.length ? slides.join("") : '<div class="swiper-slide h-[300px] flex items-center justify-center bg-gray-100 text-gray-400 text-xs">Foto Tidak Tersedia</div>'}</div>
-          <div class="swiper-pagination"></div>
-        </div>
+    function applyFilter() {
+        const source = allData.map((item, idx) => keyMap(item, idx));
+        filteredData = source.filter(x => {
+            const search = searchText.toLowerCase();
+            const matchSearch = x.nama.toLowerCase().includes(search) || x.nopol.toLowerCase().includes(search);
+            const matchStatus = selectedStatus === "" || x.status === selectedStatus;
+            return matchSearch && matchStatus;
+        });
 
-        <div class="px-6 pt-6">
-          <div class="flex items-center gap-2 mb-3">
-             <span class="status-badge ${item.status}">${item.status}</span>
-             <span class="text-[10px] font-extrabold text-gray-400 uppercase tracking-widest">UNIT INVENTORY</span>
-          </div>
-          
-          <h2 class="text-xl font-bold text-gray-900 uppercase leading-snug mb-4">${item.nama || '-'}</h2>
-          
-          <!-- Harga Card -->
-          <div class="price-tag p-5 rounded-2xl text-white shadow-lg shadow-blue-100 mb-6">
-            <p class="text-[10px] font-bold text-blue-100 uppercase tracking-widest mb-1 opacity-80">Harga Jual (OTR)</p>
-            <div class="text-2xl font-black">${F.formatFullRupiah(item.harga)}</div>
-          </div>
+        if (currentSort) {
+            filteredData.sort((a, b) => {
+                const A = F.parseRupiahToInt(a.harga);
+                const B = F.parseRupiahToInt(b.harga);
+                return currentSort === "asc" ? A - B : B - A;
+            });
+        }
 
-          <!-- Spek Ringkas Sales -->
-          <div class="grid grid-cols-2 gap-2 mb-8">
-            <div class="bg-gray-50 p-3 rounded-xl border border-gray-100">
-              <p class="text-[9px] font-bold text-gray-400 uppercase mb-1">Nomor Polisi</p>
-              <p class="text-xs font-bold text-gray-800">${item.nopol || '-'}</p>
+        const ready = filteredData.filter(x => x.status === 'READY').length;
+        const booking = filteredData.filter(x => x.status === 'BOOKING').length;
+
+        totalInfo.innerHTML = `
+            <div class="READY status-badge shadow-sm">READY ${ready}</div>
+            <div class="BOOKING status-badge shadow-sm">BOOKING ${booking}</div>
+        `;
+
+        listContainer.innerHTML = "";
+        currentIndex = 0;
+        endMessage.classList.add("hidden");
+        loadMore();
+    }
+
+    function loadMore() {
+        if (isLoading) return;
+        isLoading = true;
+        loading.classList.remove("hidden");
+
+        const nextData = filteredData.slice(currentIndex, currentIndex + perLoad);
+        
+        nextData.forEach((item) => {
+            const card = document.createElement("div");
+            card.className = "bg-white rounded-3xl overflow-hidden border border-gray-100 shadow-xl shadow-blue-900/5 p-5 flex flex-col gap-4";
+            
+            const photo = item.photos[0] || "https://via.placeholder.com/400x300?text=No+Photo";
+            
+            // Generate All Leasing List
+            const leasingEntries = Object.entries(item.bank).filter(([_, v]) => v);
+            const leasingListHtml = leasingEntries.length > 0 
+                ? leasingEntries.map(([n, v]) => `
+                    <div class="flex justify-between items-center py-1.5 border-b border-gray-50 last:border-0">
+                        <span class="text-[10px] font-black text-blue-700 uppercase tracking-tighter">${n}</span>
+                        <span class="text-[11px] font-bold text-gray-700">${v}</span>
+                    </div>`).join("")
+                : `<p class="text-[10px] text-gray-400 font-bold italic py-2">Estimasi leasing menyusul...</p>`;
+
+            card.innerHTML = `
+                <!-- Main Unit Info -->
+                <div class="flex gap-4 items-start" onclick="showModal(${JSON.stringify(item).replace(/"/g, '&quot;')})">
+                    <div class="w-24 h-24 rounded-2xl bg-gray-50 shrink-0 overflow-hidden border border-gray-100 shadow-inner">
+                        <img data-src="${photo}" class="lazy-image w-full h-full object-cover opacity-0 transition-opacity duration-500" />
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex justify-between items-start mb-1.5">
+                            <span class="status-badge ${item.status}">${item.status}</span>
+                            <span class="text-[9px] font-black text-gray-300 uppercase tracking-widest">${item.nopol || '-'}</span>
+                        </div>
+                        <h2 class="text-[14px] font-black text-gray-900 uppercase leading-tight line-clamp-2 mb-2">${item.nama || 'Unit'}</h2>
+                        <div class="price-text text-xl font-black">${F.formatFullRupiah(item.harga)}</div>
+                    </div>
+                </div>
+
+                <!-- FULL LEASING LIST -->
+                <div class="bg-gray-50/50 rounded-2xl p-4 border border-gray-100">
+                    <div class="flex items-center gap-2 mb-2">
+                        <div class="w-1 h-3 bg-blue-600 rounded-full"></div>
+                        <h3 class="text-[9px] font-black text-gray-400 uppercase tracking-widest">Estimasi Leasing</h3>
+                    </div>
+                    <div class="flex flex-col">
+                        ${leasingListHtml}
+                    </div>
+                </div>
+
+                <!-- QUICK ACTIONS -->
+                <div class="grid grid-cols-2 gap-3 mt-1">
+                    <button class="bg-blue-50 text-blue-700 py-3 rounded-2xl text-[10px] font-black uppercase tracking-[0.15em] flex items-center justify-center gap-2 active:scale-95 transition" onclick="copyUnit(${JSON.stringify(item).replace(/"/g, '&quot;')})">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2" />
+                        </svg> SALIN DATA
+                    </button>
+                    <button class="bg-green-500 text-white py-3 rounded-2xl text-[10px] font-black uppercase tracking-[0.15em] flex items-center justify-center gap-2 shadow-lg shadow-green-100 active:scale-95 transition" onclick="shareWA(${JSON.stringify(item).replace(/"/g, '&quot;')})">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                        </svg> SHARE WA
+                    </button>
+                </div>
+            `;
+            listContainer.appendChild(card);
+        });
+
+        initLazyLoad();
+        currentIndex += perLoad;
+        isLoading = false;
+        loading.classList.add("hidden");
+
+        if (currentIndex >= filteredData.length && filteredData.length > 0) {
+            endMessage.classList.remove("hidden");
+        }
+    }
+
+    function initLazyLoad() {
+        const lazyImages = document.querySelectorAll("img.lazy-image");
+        const observer = new IntersectionObserver((entries, obs) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    img.src = img.dataset.src;
+                    img.onload = () => img.classList.add("opacity-100");
+                    obs.unobserve(img);
+                }
+            });
+        }, { rootMargin: "200px" });
+        lazyImages.forEach(img => observer.observe(img));
+    }
+
+    function showModal(item) {
+        const slides = item.photos.map(src => `
+            <div class="swiper-slide h-[350px] bg-gray-50">
+                <img data-src="${src}" class="lazy-image object-cover w-full h-full" />
             </div>
-            <div class="bg-gray-50 p-3 rounded-xl border border-gray-100">
-              <p class="text-[9px] font-bold text-gray-400 uppercase mb-1">Masa Pajak</p>
-              <p class="text-xs font-bold text-gray-800">${item.bulan || '-'}</p>
+        `);
+
+        modalContent.innerHTML = `
+            <div class="relative pb-12 bg-white">
+                <div class="swiper galeriSales">
+                    <div class="swiper-wrapper">${slides.length ? slides.join("") : '<div class="swiper-slide h-[350px] flex items-center justify-center bg-gray-100 text-gray-400 text-[10px] font-black uppercase tracking-widest">Foto Tidak Tersedia</div>'}</div>
+                    <div class="swiper-pagination"></div>
+                </div>
+
+                <div class="px-8 pt-8">
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="status-badge ${item.status}">${item.status}</span>
+                        <div class="h-3 w-[1px] bg-gray-200"></div>
+                        <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Detail Katalog</span>
+                    </div>
+                    
+                    <h2 class="text-2xl font-black text-gray-900 uppercase leading-none mb-6">${item.nama || '-'}</h2>
+                    
+                    <div class="bg-blue-600 p-8 rounded-[32px] text-white shadow-2xl shadow-blue-200 mb-8 relative overflow-hidden">
+                        <div class="absolute top-0 right-0 p-4 opacity-10">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <p class="text-[11px] font-black text-blue-100 uppercase tracking-[0.3em] mb-2">Harga Jual OTR</p>
+                        <div class="text-4xl font-black">${F.formatFullRupiah(item.harga)}</div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 mb-10">
+                        <div class="bg-gray-50 p-5 rounded-3xl border border-gray-100">
+                            <p class="text-[9px] font-black text-gray-400 uppercase mb-1 tracking-widest">NOPOL</p>
+                            <p class="text-base font-black text-gray-900 uppercase">${item.nopol || '-'}</p>
+                        </div>
+                        <div class="bg-gray-50 p-5 rounded-3xl border border-gray-100">
+                            <p class="text-[9px] font-black text-gray-400 uppercase mb-1 tracking-widest">PAJAK</p>
+                            <p class="text-base font-black text-gray-900 uppercase">${item.bulan || '-'}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-12">
+                        <div class="flex items-center gap-3 mb-6">
+                            <div class="w-2 h-5 bg-blue-600 rounded-full"></div>
+                            <h3 class="text-xs font-black text-gray-900 uppercase tracking-[0.2em]">Estimasi Cicilan</h3>
+                        </div>
+                        <div class="space-y-4">
+                            ${Object.entries(item.bank).map(([name, val]) => val ? `
+                                <div class="flex justify-between items-center bg-white p-5 rounded-3xl border border-gray-100 shadow-sm">
+                                    <span class="text-xs font-black text-blue-700 uppercase tracking-widest">${name}</span>
+                                    <span class="text-[13px] font-black text-gray-800">${val}</span>
+                                </div>
+                            ` : '').join('')}
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col gap-4">
+                        <button class="w-full bg-green-500 text-white rounded-[24px] py-5 font-black text-sm shadow-xl shadow-green-100 active:scale-95 transition flex items-center justify-center gap-3 uppercase tracking-widest" onclick="shareWA(${JSON.stringify(item).replace(/"/g, '&quot;')})">
+                             Bagikan Katalog Ke Konsumen
+                        </button>
+                        <button class="w-full bg-gray-100 text-gray-600 rounded-[24px] py-4 font-black text-[11px] flex items-center justify-center gap-3 uppercase tracking-widest" onclick="copyUnit(${JSON.stringify(item).replace(/"/g, '&quot;')})">
+                             Salin Detail Unit
+                        </button>
+                    </div>
+                </div>
             </div>
-          </div>
-          
-          <!-- Sales Credit Guide -->
-          <div class="mb-8">
-            <h3 class="text-[10px] font-black text-gray-900 mb-4 uppercase tracking-[0.2em] flex items-center gap-2">
-              <div class="w-1 h-3 bg-blue-600 rounded-full"></div> Estimasi Leasing
-            </h3>
-            <div class="space-y-2">
-               ${Object.entries(item.bank).map(([name, val]) => val ? `
-                 <div class="flex justify-between items-center bg-white p-3 rounded-xl border border-gray-100">
-                   <span class="text-[11px] font-black text-blue-700">${name}</span>
-                   <span class="text-[11px] font-medium text-gray-600">${val}</span>
-                 </div>
-               ` : '').join('')}
-            </div>
-          </div>
+        `;
 
-          <!-- Sales Actions -->
-          <div class="grid grid-cols-5 gap-3">
-            <button id="copyBtn" class="col-span-1 bg-gray-100 text-gray-600 rounded-2xl py-4 flex items-center justify-center active:scale-95 transition">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
-              </svg>
-            </button>
-            <button id="shareWABtn" class="col-span-4 bg-green-500 text-white rounded-2xl py-4 font-bold text-xs shadow-lg shadow-green-100 active:scale-95 transition flex items-center justify-center gap-2 uppercase tracking-wider">
-              Share Katalog Ke Konsumen
-            </button>
-          </div>
-        </div>
-      </div>
-    `;
+        document.getElementById("closeModalInner").onclick = hideModal;
+        detailModal.onclick = (e) => { if (e.target === detailModal) hideModal(); };
 
-    document.getElementById("copyBtn").onclick = () => copyUnit(item);
-    document.getElementById("shareWABtn").onclick = () => shareWA(item);
-    
-    document.getElementById("closeModalInner").onclick = hideModal;
-    detailModal.onclick = (e) => { if (e.target === detailModal) hideModal(); };
+        new Swiper('.galeriSales', { 
+            slidesPerView: 1, 
+            pagination: { el: '.swiper-pagination', clickable: true },
+            observer: true,
+            observeParents: true
+        });
 
-    new Swiper('.galeriSales', { 
-      slidesPerView: 1, 
-      pagination: { el: '.swiper-pagination', clickable: true },
-      observer: true,
-      observeParents: true
-    });
+        detailModal.classList.remove("hidden");
+        detailModal.classList.add("flex");
+        initLazyLoad();
+    }
 
-    detailModal.classList.remove("hidden");
-    detailModal.classList.add("flex");
-    initLazyLoad();
-  }
+    function hideModal() {
+        detailModal.classList.add("hidden");
+        detailModal.classList.remove("flex");
+    }
 
-  function hideModal() {
-    detailModal.classList.add("hidden");
-    detailModal.classList.remove("flex");
-  }
+    function shareWA(item) {
+        let creditText = "";
+        Object.entries(item.bank).forEach(([bankName, val]) => {
+            if (val) creditText += `\n- ${bankName}: ${val}`;
+        });
 
-  function shareWA(item) {
-    let creditText = "";
-    Object.entries(item.bank).forEach(([bankName, val]) => {
-      if (val) creditText += `\n- ${bankName}: ${val}`;
-    });
+        const text = `*RAFFASYA MOTOR SUBANG*\n\nUnit: *${item.nama}*\nHarga OTR: *${F.formatFullRupiah(item.harga)}*\nNopol: ${item.nopol || '-'}\nPajak: ${item.bulan || '-'}\n\n*ESTIMASI CICILAN:*${creditText || '\n- Hubungi kami untuk detail'}\n\nInfo lanjut hubungi kami segera!`;
+        window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+    }
 
-    const text = `Halo, ini katalog unit *${item.nama}* di Raffasya Motor.\n\nHarga OTR: *${F.formatFullRupiah(item.harga)}*\nNopol: ${item.nopol || '-'}\n\n*Estimasi Cicilan:*${creditText || '\n- Hubungi Sales untuk detail'}\n\nInformasi lebih lanjut hubungi saya segera!`;
-    window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
-  }
+    function copyUnit(item) {
+        let creditText = "";
+        Object.entries(item.bank).forEach(([bankName, val]) => {
+            if (val) creditText += `\n- ${bankName}: ${val}`;
+        });
 
-  function copyUnit(item) {
-    let creditText = "";
-    Object.entries(item.bank).forEach(([bankName, val]) => {
-      if (val) creditText += `\n- ${bankName}: ${val}`;
-    });
+        const text = `RAFFASYA MOTOR SUBANG\n\nUnit: ${item.nama}\nHarga: ${F.formatFullRupiah(item.harga)}\nNopol: ${item.nopol || '-'}\nPajak: ${item.bulan || '-'}\n\nEstimasi Cicilan:${creditText || '\n- Segera Hubungi Sales'}`;
+        
+        const el = document.createElement('textarea');
+        el.value = text;
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand('copy');
+        document.body.removeChild(el);
+        
+        const toast = document.getElementById("copyToast");
+        toast.style.opacity = "1";
+        setTimeout(() => { toast.style.opacity = "0"; }, 2000);
+    }
 
-    const text = `Unit: ${item.nama}\nHarga: ${F.formatFullRupiah(item.harga)}\nNopol: ${item.nopol || '-'}\n\nEstimasi Cicilan:${creditText || '\n- Hubungi Sales'}`;
-    
-    const el = document.createElement('textarea');
-    el.value = text;
-    document.body.appendChild(el);
-    el.select();
-    document.execCommand('copy');
-    document.body.removeChild(el);
-    
-    // Show custom toast
-    const toast = document.getElementById("copyToast");
-    toast.style.opacity = "1";
-    setTimeout(() => { toast.style.opacity = "0"; }, 2000);
-  }
+    let refreshTimer;
+    let countdown = REFRESH_INTERVAL / 1000;
 
-  let refreshTimer;
-  let countdown = REFRESH_INTERVAL / 1000;
-
-  function startAutoRefresh() {
-    if (refreshTimer) clearInterval(refreshTimer);
-    countdown = REFRESH_INTERVAL / 1000;
-    refreshTimer = setInterval(() => {
-      countdown--;
-      refreshTimerEl.innerText = `Update in ${countdown}s`;
-      if (countdown <= 0) {
-        fetchData(true); 
+    function startAutoRefresh() {
+        if (refreshTimer) clearInterval(refreshTimer);
         countdown = REFRESH_INTERVAL / 1000;
-      }
-    }, 1000);
-  }
-
-  async function fetchData(isSilent = false) {
-    if (!isSilent) loading.classList.remove("hidden");
-    try {
-      const res = await fetch(apiURL);
-      const json = await res.json();
-      const rows = Array.isArray(json) ? json : (json.data || json.records || []);
-      allData = rows.slice().reverse();
-      const now = new Date();
-      lastUpdateEl.innerText = `${now.getHours()}:${now.getMinutes().toString().padStart(2, '0')}`;
-    } catch (err) {
-      console.error(err);
-    } finally {
-      applyFilter();
-      if (!isSilent) loading.classList.add("hidden");
+        refreshTimer = setInterval(() => {
+            countdown--;
+            refreshTimerEl.innerText = `Refresh in ${countdown}s`;
+            if (countdown <= 0) {
+                fetchData(true); 
+                countdown = REFRESH_INTERVAL / 1000;
+            }
+        }, 1000);
     }
-  }
 
-  window.addEventListener('scroll', () => {
-    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 400) {
-      if (currentIndex < filteredData.length) loadMore();
+    async function fetchData(isSilent = false) {
+        if (!isSilent) loading.classList.remove("hidden");
+        try {
+            const res = await fetch(apiURL);
+            const json = await res.json();
+            const rows = Array.isArray(json) ? json : (json.data || json.records || []);
+            allData = rows.slice().reverse();
+            const now = new Date();
+            lastUpdateEl.innerText = `${now.getHours()}:${now.getMinutes().toString().padStart(2, '0')}`;
+        } catch (err) {
+            console.error(err);
+        } finally {
+            applyFilter();
+            if (!isSilent) loading.classList.add("hidden");
+        }
     }
-  });
 
-  searchInput.addEventListener("input", () => { searchText = searchInput.value; applyFilter(); });
-  sortPrice.addEventListener("change", () => { currentSort = sortPrice.value; applyFilter(); });
-  filterStatus.addEventListener("change", () => { selectedStatus = filterStatus.value; applyFilter(); });
-  resetBtn.addEventListener("click", () => {
-    searchText = ""; currentSort = ""; selectedStatus = "";
-    searchInput.value = ""; sortPrice.value = ""; filterStatus.value = "";
-    applyFilter();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
+    window.addEventListener('scroll', () => {
+        if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 400) {
+            if (currentIndex < filteredData.length) loadMore();
+        }
+    });
 
-  fetchData();
-  startAutoRefresh();
+    searchInput.addEventListener("input", () => { searchText = searchInput.value; applyFilter(); });
+    sortPrice.addEventListener("change", () => { currentSort = sortPrice.value; applyFilter(); });
+    filterStatus.addEventListener("change", () => { selectedStatus = filterStatus.value; applyFilter(); });
+    resetBtn.addEventListener("click", () => {
+        searchText = ""; currentSort = ""; selectedStatus = "";
+        searchInput.value = ""; sortPrice.value = ""; filterStatus.value = "";
+        applyFilter();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    fetchData();
+    startAutoRefresh();
 </script>
 </body>
 </html>
