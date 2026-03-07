@@ -54,6 +54,16 @@
 
         .TERJUAL { background: #fef2f2; color: #b91c1c; border: 1px solid #fee2e2; }
 
+     .COMING-SOON { 
+    background: #fffbeb; 
+    color: #b45309; 
+    border: 1px solid #fef3c7; 
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+}
+
+
         
 
         .price-text {
@@ -255,6 +265,8 @@
                     <option value="READY">Unit Ready</option>
 
                     <option value="BOOKING">Sudah Booking</option>
+
+                    <option value="COMING SOON">COMING SOON</option>
 
                     <option value="TERJUAL">Sudah Terjual</option>
 
@@ -498,6 +510,8 @@
 
         const booking = filteredData.filter(x => x.status === 'BOOKING').length;
 
+        const comingsoon = filteredData.filter(x => x.status === 'COMING SOON').length;
+
 
 
         totalInfo.innerHTML = `
@@ -505,6 +519,8 @@
             <div class="READY status-badge shadow-sm">READY ${ready}</div>
 
             <div class="BOOKING status-badge shadow-sm">BOOKING ${booking}</div>
+
+            <div class="COMING SOON status-badge shadow-sm">COMING SOON ${comingsoon}</div>
 
         `;
 
