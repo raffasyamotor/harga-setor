@@ -13,7 +13,7 @@
     <h1 class="text-3xl font-bold tracking-wide">RAFFASYA MOTOR SUBANG</h1>
     <p class="text-sm opacity-80 mt-1">Daftar Harga Mobil Terbaru</p>
     <div id="refreshTimer" class="text-[10px] mt-2 opacity-60">Memperbarui data...</div>
-  </header>
+  
 
   <main class="max-w-6xl mx-auto px-4 py-6">
     <!-- FILTER -->
@@ -40,13 +40,14 @@
       <button id="resetBtn"
         class="bg-red-500 text-white rounded px-4 py-2 shadow-sm hover:bg-red-600 transition">Reset</button>
     </div>
+  
 
     <!-- Info Total Unit + Rekap Status -->
     <div class="flex justify-between items-center mb-6">
         <div id="totalInfo" class="text-gray-700 font-medium text-sm md:text-base"></div>
         <div id="lastUpdate" class="text-[10px] text-gray-400 italic">Terakhir cek: -</div>
     </div>
-
+  </header>
     <!-- LIST MOBIL -->
     <div id="mobilList" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"></div>
 
