@@ -54,6 +54,11 @@
       transition: opacity 0.3s;
       pointer-events: none;
     }
+
+    /* Swiper Pagination Style Overrides */
+    .swiper-pagination-bullet-active {
+      background: #2563eb !important;
+    }
   </style>
 </head>
 
@@ -156,9 +161,22 @@
   </nav>
 
   <!-- SALES DETAIL SHEET -->
-  <div id="detailModal" class="fixed inset-0 bg-black/60 z-[60] hidden items-end justify-center">
-    <div class="bg-white rounded-t-[32px] w-full max-w-xl relative overflow-hidden modal-sheet max-h-[92vh] overflow-y-auto no-scrollbar shadow-2xl">
-      <div id="modalContent"></div>
+  <div id="detailModal" class="fixed inset-0 bg-black/70 z-[60] hidden items-end justify-center">
+    <div class="bg-white rounded-t-[32px] w-full max-w-xl relative overflow-hidden modal-sheet max-h-[95vh] flex flex-col shadow-2xl">
+      <!-- Modal Header Overlay -->
+      <div class="absolute top-0 left-0 right-0 h-16 bg-gradient-to-b from-black/40 to-transparent z-[70] pointer-events-none rounded-t-[32px]"></div>
+      
+      <!-- Drag Indicator -->
+      <div class="absolute top-3 left-1/2 -translate-x-1/2 w-12 h-1.5 bg-white/40 rounded-full z-[80]"></div>
+      
+      <!-- Improved Close Button -->
+      <button id="closeModalInner" class="absolute top-4 right-5 z-[100] bg-white/20 hover:bg-white/40 active:scale-90 backdrop-blur-md rounded-full w-9 h-9 flex items-center justify-center text-white transition-all shadow-lg border border-white/30">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+
+      <div id="modalContent" class="overflow-y-auto no-scrollbar"></div>
     </div>
   </div>
 
@@ -321,18 +339,15 @@
 
   function showModal(item) {
     const slides = item.photos.map(src => `
-      <div class="swiper-slide h-[280px] bg-gray-100">
+      <div class="swiper-slide h-[300px] bg-gray-100">
         <img data-src="${src}" class="lazy-image object-cover w-full h-full" />
       </div>
     `);
 
     modalContent.innerHTML = `
       <div class="relative pb-10">
-        <div class="absolute top-4 left-1/2 -translate-x-1/2 w-10 h-1.5 bg-black/10 rounded-full z-50"></div>
-        <button id="closeModalInner" class="absolute top-4 right-4 z-50 text-white bg-black/30 rounded-full w-8 h-8 flex items-center justify-center backdrop-blur-md">&times;</button>
-        
         <div class="swiper galeriSales">
-          <div class="swiper-wrapper">${slides.length ? slides.join("") : '<div class="swiper-slide h-[280px] flex items-center justify-center bg-gray-100 text-gray-400 text-xs">Foto Tidak Tersedia</div>'}</div>
+          <div class="swiper-wrapper">${slides.length ? slides.join("") : '<div class="swiper-slide h-[300px] flex items-center justify-center bg-gray-100 text-gray-400 text-xs">Foto Tidak Tersedia</div>'}</div>
           <div class="swiper-pagination"></div>
         </div>
 
@@ -379,12 +394,12 @@
 
           <!-- Sales Actions -->
           <div class="grid grid-cols-5 gap-3">
-            <button onclick='copyUnit(${JSON.stringify(item)})' class="col-span-1 bg-gray-100 text-gray-600 rounded-2xl py-4 flex items-center justify-center active:scale-95 transition">
+            <button id="copyBtn" class="col-span-1 bg-gray-100 text-gray-600 rounded-2xl py-4 flex items-center justify-center active:scale-95 transition">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
               </svg>
             </button>
-            <button onclick='shareWA(${JSON.stringify(item)})' class="col-span-4 bg-green-500 text-white rounded-2xl py-4 font-bold text-xs shadow-lg shadow-green-100 active:scale-95 transition flex items-center justify-center gap-2 uppercase tracking-wider">
+            <button id="shareWABtn" class="col-span-4 bg-green-500 text-white rounded-2xl py-4 font-bold text-xs shadow-lg shadow-green-100 active:scale-95 transition flex items-center justify-center gap-2 uppercase tracking-wider">
               Share Katalog Ke Konsumen
             </button>
           </div>
@@ -392,10 +407,19 @@
       </div>
     `;
 
+    document.getElementById("copyBtn").onclick = () => copyUnit(item);
+    document.getElementById("shareWABtn").onclick = () => shareWA(item);
+    
     document.getElementById("closeModalInner").onclick = hideModal;
     detailModal.onclick = (e) => { if (e.target === detailModal) hideModal(); };
 
-    new Swiper('.galeriSales', { slidesPerView: 1, pagination: { el: '.swiper-pagination', clickable: true } });
+    new Swiper('.galeriSales', { 
+      slidesPerView: 1, 
+      pagination: { el: '.swiper-pagination', clickable: true },
+      observer: true,
+      observeParents: true
+    });
+
     detailModal.classList.remove("hidden");
     detailModal.classList.add("flex");
     initLazyLoad();
