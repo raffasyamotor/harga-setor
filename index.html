@@ -110,6 +110,75 @@
         <div id="endMessage" class="text-center text-gray-400 text-[10px] py-12 hidden font-black uppercase tracking-[0.3em]">Katalog Terupdate</div>
     </main>
 
+     <!-- View Kalkulator (Hidden by Default) -->
+    <main id="kalkulatorView" class="max-w-xl mx-auto px-6 pt-8 hidden">
+        <div class="mb-8">
+            <h2 class="text-2xl font-black text-gray-900 uppercase italic">Kalkulator Simulasi</h2>
+            <p class="text-xs text-gray-400 font-bold uppercase tracking-wider mt-1">Hitung estimasi angsuran mandiri</p>
+        </div>
+
+        <div class="bg-white rounded-[32px] p-6 shadow-xl shadow-blue-900/5 border border-gray-50 space-y-5">
+            <div>
+                <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2 block px-1">Harga Unit (OTR)</label>
+                <div class="relative">
+                    <span class="absolute left-4 top-1/2 -translate-y-1/2 font-bold text-gray-400 text-sm">Rp</span>
+                    <input type="number" id="calcOtr" placeholder="0" class="w-full bg-gray-50 border-none rounded-2xl py-4 pl-12 pr-4 font-bold text-gray-900 outline-none ring-2 ring-transparent focus:ring-blue-500/20" />
+                </div>
+            </div>
+
+            <div>
+                <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2 block px-1">DP (Down Payment)</label>
+                <div class="relative">
+                    <span class="absolute left-4 top-1/2 -translate-y-1/2 font-bold text-gray-400 text-sm">Rp</span>
+                    <input type="number" id="calcDp" placeholder="0" class="w-full bg-gray-50 border-none rounded-2xl py-4 pl-12 pr-4 font-bold text-gray-900 outline-none ring-2 ring-transparent focus:ring-blue-500/20" />
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2 block px-1">Tenor (Tahun)</label>
+                    <select id="calcTenor" class="w-full bg-gray-50 border-none rounded-2xl py-4 px-4 font-bold text-gray-900 outline-none appearance-none">
+                        <option value="1">1 Tahun</option>
+                        <option value="2">2 Tahun</option>
+                        <option value="3">3 Tahun</option>
+                        <option value="4" selected>4 Tahun</option>
+                        <option value="5">5 Tahun</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2 block px-1">Bunga (%/Tahun)</label>
+                    <input type="number" id="calcInterest" value="8" step="0.1" class="w-full bg-gray-50 border-none rounded-2xl py-4 px-4 font-bold text-gray-900 outline-none ring-2 ring-transparent focus:ring-blue-500/20" />
+                </div>
+            </div>
+
+            <button onclick="calculateCredit()" class="w-full bg-blue-600 text-white py-5 rounded-2xl font-black text-xs uppercase tracking-widest shadow-lg shadow-blue-100 mt-4 active:scale-95 transition">Hitung Angsuran</button>
+        </div>
+
+        <div id="calcResult" class="mt-8 hidden animate-in fade-in slide-in-from-bottom-4">
+            <div class="bg-blue-600 rounded-[32px] p-8 text-white shadow-2xl shadow-blue-200 text-center relative overflow-hidden">
+                <div class="absolute -top-4 -right-4 opacity-10">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-32 w-32" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                    </svg>
+                </div>
+                <p class="text-[10px] font-black text-blue-100 uppercase tracking-[0.3em] mb-2">Estimasi Angsuran / Bulan</p>
+                <div id="resInstallment" class="text-4xl font-black mb-2 leading-none">Rp 0</div>
+                <p id="resTenorText" class="text-[10px] font-bold text-blue-200 uppercase tracking-widest">48x Pembayaran</p>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-3 mt-4">
+                <div class="bg-white p-4 rounded-2xl border border-gray-100 text-center">
+                    <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1">Plafond Pinjaman</p>
+                    <p id="resLoan" class="font-bold text-gray-800 text-sm">Rp 0</p>
+                </div>
+                <div class="bg-white p-4 rounded-2xl border border-gray-100 text-center">
+                    <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1">Total Bayar</p>
+                    <p id="resTotal" class="font-bold text-gray-800 text-sm">Rp 0</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
     <!-- Navigasi Bawah -->
     <nav class="fixed bottom-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-lg border-t border-gray-100 safe-area-bottom shadow-2xl">
         <div class="max-w-lg mx-auto px-8 py-4 flex justify-between items-center">
@@ -150,6 +219,17 @@
                 </div>
                 <span class="text-[9px] font-black text-gray-400 tracking-widest uppercase">Urutan</span>
             </div>
+
+            
+            <button id="navCalc" onclick="switchView('calc')" class="flex flex-col items-center gap-1 flex-1 py-1 group">
+                <div class="nav-icon text-gray-400 group-active:scale-90 transition-all transform">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                    </svg>
+                </div>
+                <span class="nav-label text-[9px] font-black text-gray-400 tracking-widest uppercase">Hitung DP</span>
+            </button>
+
         </div>
     </nav>
 
@@ -436,6 +516,30 @@
         detailModal.classList.remove("flex");
     }
 
+     // Logika Kalkulator
+    function calculateCredit() {
+        const otr = parseFloat(document.getElementById('calcOtr').value) || 0;
+        const dp = parseFloat(document.getElementById('calcDp').value) || 0;
+        const tenorTahun = parseInt(document.getElementById('calcTenor').value);
+        const bungaTahun = parseFloat(document.getElementById('calcInterest').value) / 100;
+
+        if (otr <= 0 || dp < 0) return;
+
+        const plafond = otr - dp;
+        const tenorBulan = tenorTahun * 12;
+        
+        // Rumus Flat (Umum untuk mobil bekas/multiguna)
+        const bungaTotal = plafond * bungaTahun * tenorTahun;
+        const totalBayar = plafond + bungaTotal;
+        const angsuran = Math.ceil(totalBayar / tenorBulan);
+
+        document.getElementById('resInstallment').innerText = F.formatFullRupiah(angsuran);
+        document.getElementById('resTenorText').innerText = `${tenorBulan}x Pembayaran (${tenorTahun} Tahun)`;
+        document.getElementById('resLoan').innerText = F.formatFullRupiah(plafond);
+        document.getElementById('resTotal').innerText = F.formatFullRupiah(totalBayar);
+        
+        document.getElementById('calcResult').classList.remove('hidden');
+    }
     // FUNGSI SHARE NATIVE
     async function shareUnit(item) {
         let creditText = "";
