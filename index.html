@@ -440,7 +440,7 @@
 
         const harga = F.get(item, 'HARGA JUAL (OTR)', 'HARGA OTR', 'HARGA', 'PRICE');
 
-        const warna = F.get(item, 'WARNA', 'Warna', 'warna');
+        const warna = F.get(item, 'WARNA');
 
         const status = F.normStatus(F.get(item, 'STATUS', 'Status', 'status'));
 
@@ -468,7 +468,7 @@
 
         }
 
-        return { nama, nopol, harga, status, bulan, bank, photos, rawIndex: index };
+        return { nama, nopol, warna, harga, status, bulan, bank, photos, rawIndex: index };
 
     }
 
