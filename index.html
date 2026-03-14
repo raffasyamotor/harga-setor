@@ -440,6 +440,8 @@
 
         const harga = F.get(item, 'HARGA JUAL (OTR)', 'HARGA OTR', 'HARGA', 'PRICE');
 
+        const warna = F.get(item, 'WARNA', 'Warna', 'warna');
+
         const status = F.normStatus(F.get(item, 'STATUS', 'Status', 'status'));
 
         const bulan = F.get(item, 'BULAN', 'Bulan', 'bulan');
@@ -601,6 +603,7 @@
                         </div>
 
                         <h2 class="text-[14px] font-black text-gray-900 uppercase leading-tight line-clamp-2 mb-2">${item.nama || 'Unit'}</h2>
+                        <span class="text-[9px] font-black text-gray-300 uppercase tracking-widest">Warna : ${item.warna || '-'}</span>
 
                         <div class="price-text text-xl font-black">${F.formatFullRupiah(item.harga)}</div>
 
