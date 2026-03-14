@@ -754,6 +754,7 @@
                     
 
                     <h2 class="text-2xl font-black text-gray-900 uppercase leading-none mb-6">${item.nama || '-'}</h2>
+                     <span class="text-[9px] font-black text-gray-300 uppercase tracking-widest">Warna : ${item.warna || '-'}</span>
 
                     
 
@@ -911,7 +912,7 @@
 
             title: 'Katalog Raffasya Motor',
 
-            text: `*RAFFASYA MOTOR SUBANG*\n\nUnit: *${item.nama}*\nHarga OTR: *${F.formatFullRupiah(item.harga)}*\nNopol: ${item.nopol || '-'}\nPajak: ${item.bulan || '-'}\n\n*ESTIMASI CICILAN:*${creditText || '\n- Hubungi kami untuk detail'}\n\nInfo lanjut hubungi kami segera!`
+            text: `*RAFFASYA MOTOR SUBANG*\n\nUnit: *${item.nama}*\n*${item.warna}*\nHarga OTR: *${F.formatFullRupiah(item.harga)}*\nNopol: ${item.nopol || '-'}\nPajak: ${item.bulan || '-'}\n\n*ESTIMASI CICILAN:*${creditText || '\n- Hubungi kami untuk detail'}\n\nInfo lanjut hubungi kami segera!`
 
         };
 
@@ -955,7 +956,7 @@
 
 
 
-        const text = `RAFFASYA MOTOR SUBANG\n\nUnit: ${item.nama}\nHarga: ${F.formatFullRupiah(item.harga)}\nNopol: ${item.nopol || '-'}\nPajak: ${item.bulan || '-'}\n\nEstimasi Cicilan:${creditText || '\n- Segera Hubungi Sales'}`;
+        const text = `RAFFASYA MOTOR SUBANG\n\nUnit: ${item.nama}\n${item.warna}\nHarga: ${F.formatFullRupiah(item.harga)}\nNopol: ${item.nopol || '-'}\nPajak: ${item.bulan || '-'}\n\nEstimasi Cicilan:${creditText || '\n- Segera Hubungi Sales'}`;
 
         
 
