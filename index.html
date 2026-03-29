@@ -1017,9 +1017,47 @@
 
 
 
+    // MEMPERCEPAT LOADING DENGAN LOCAL STORAGE CACHING
+
     async function fetchData(isSilent = false) {
 
-        if (!isSilent) loading.classList.remove("hidden");
+        // 1. Cek apakah ada data cache tersimpan di perangkat pengguna
+
+        const cachedData = localStorage.getItem('raffasya_data_cache');
+
+        
+
+        // Jika ada cache, langsung tampilkan data tanpa menunggu loading Google Sheets
+
+        if (cachedData && !isSilent) {
+
+            try {
+
+                allData = JSON.parse(cachedData);
+
+                applyFilter();
+
+                if (refreshTimerEl) refreshTimerEl.innerText = "Memeriksa data baru...";
+
+            } catch (e) {
+
+                console.error("Gagal membaca cache:", e);
+
+                loading.classList.remove("hidden");
+
+            }
+
+        } else if (!isSilent) {
+
+            // Jika benar-benar baru buka web pertama kali, tampilkan loading spinner
+
+            loading.classList.remove("hidden");
+
+        }
+
+
+
+        // 2. Tetap ambil data terbaru di latar belakang (background)
 
         try {
 
@@ -1029,7 +1067,19 @@
 
             const rows = Array.isArray(json) ? json : (json.data || json.records || []);
 
-            allData = rows.slice().reverse();
+            
+
+            const newData = rows.slice().reverse();
+
+            
+
+            // Simpan data terbaru ke Cache HP/Laptop pengguna
+
+            localStorage.setItem('raffasya_data_cache', JSON.stringify(newData));
+
+            
+
+            allData = newData;
 
             const now = new Date();
 
@@ -1037,9 +1087,11 @@
 
         } catch (err) {
 
-            console.error(err);
+            console.error("Gagal update data:", err);
 
         } finally {
+
+            // Perbarui tampilan dengan data terbaru (jika ada perubahan)
 
             applyFilter();
 
