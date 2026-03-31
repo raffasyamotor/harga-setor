@@ -319,7 +319,7 @@
                                     <path d="m12 14 4-4"/>
                                     <path d="M3.34 16a10 10 0 1 1 17.32 0"/>
                                 </svg>
-                                ${F.formatKM(item.km)} on going
+                                ${F.formatKM(item.km)} (on going)
                             </span>
                         </div>
                         
@@ -406,7 +406,7 @@
                                 <path d="m12 14 4-4"/>
                                 <path d="M3.34 16a10 10 0 1 1 17.32 0"/>
                             </svg>
-                            ${F.formatKM(item.km)} on going
+                            ${F.formatKM(item.km)} (on going)
                         </span>
                     </div>
                     
@@ -487,7 +487,7 @@
 
         const shareData = {
             title: 'Katalog Raffasya Motor',
-            text: `*RAFFASYA MOTOR SUBANG*\n\nUnit: *${item.nama}*\n*${item.warna}*\nKilometer: *${F.formatKM(item.km)} on going*\nHarga OTR: *${F.formatFullRupiah(item.harga)}*\nNopol: ${item.nopol || '-'}\n\n*ESTIMASI CICILAN:*${creditText || '\n- Hubungi kami untuk detail'}\n\nInfo lanjut hubungi kami segera!`
+            text: `*RAFFASYA MOTOR SUBANG*\n\nUnit: *${item.nama}*\n*${item.warna}*\nKilometer: *${F.formatKM(item.km)} (on going)*\nHarga OTR: *${F.formatFullRupiah(item.harga)}*\nNopol: ${item.nopol || '-'}\n\n*ESTIMASI CICILAN:*${creditText || '\n- Hubungi kami untuk detail'}\n\nInfo lanjut hubungi kami segera!`
         };
 
         // Cek jika browser mendukung Web Share API
@@ -509,7 +509,7 @@
             if (val) creditText += `\n- ${bankName}: ${val}`;
         });
 
-        const text = `RAFFASYA MOTOR SUBANG\n\nUnit: ${item.nama}\n${item.warna}\nKilometer: ${F.formatKM(item.km)} on going\nHarga: ${F.formatFullRupiah(item.harga)}\nNopol: ${item.nopol || '-'}\n\nEstimasi Cicilan:${creditText || '\n- Segera Hubungi Sales'}`;
+        const text = `RAFFASYA MOTOR SUBANG\n\nUnit: ${item.nama}\n${item.warna}\nKilometer: ${F.formatKM(item.km)} (on going)\nHarga: ${F.formatFullRupiah(item.harga)}\nNopol: ${item.nopol || '-'}\n\nEstimasi Cicilan:${creditText || '\n- Segera Hubungi Sales'}`;
         
         const el = document.createElement('textarea');
         el.value = text;
