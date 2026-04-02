@@ -4,6 +4,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>Sales Hub - Raffasya Motor</title>
+    
+    <!-- PWA Meta Tags & Manifest -->
+    <meta name="theme-color" content="#ffffff">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Sales Hub">
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/1048/1048313.png">
+    <link rel="manifest" href='data:application/manifest+json,{"name":"Sales Hub - Raffasya Motor","short_name":"Sales Hub","start_url":".","display":"standalone","background_color":"#f4f7fa","theme_color":"#ffffff","icons":[{"src":"https://cdn-icons-png.flaticon.com/512/1048/1048313.png","sizes":"512x512","type":"image/png","purpose":"any maskable"}]}'>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -84,9 +93,18 @@
                     <p class="text-[10px] text-gray-400 font-bold mt-1 uppercase tracking-widest">Raffasya Motor</p>
                 </div>
             </div>
-            <div class="text-right">
-                <div id="lastUpdate" class="text-[11px] font-black text-blue-600">--:--</div>
-                <div id="refreshTimer" class="text-[9px] text-gray-400 font-medium">Syncing...</div>
+            <div class="flex items-center gap-3">
+                <!-- Tombol Install PWA Dinamis -->
+                <button id="installAppBtn" class="hidden bg-blue-50 text-blue-700 px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider flex items-center gap-1.5 border border-blue-100 active:scale-95 transition-transform shadow-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                    </svg>
+                    APP
+                </button>
+                <div class="text-right">
+                    <div id="lastUpdate" class="text-[11px] font-black text-blue-600">--:--</div>
+                    <div id="refreshTimer" class="text-[9px] text-gray-400 font-medium">Syncing...</div>
+                </div>
             </div>
         </div>
     </header>
@@ -174,6 +192,26 @@
                 </button>
             </div>
             <div id="modalContent" class="overflow-y-auto no-scrollbar"></div>
+        </div>
+    </div>
+
+    <!-- MODAL PANDUAN INSTALL iOS -->
+    <div id="iosInstallModal" class="fixed inset-0 bg-black/80 z-[70] hidden items-end justify-center">
+        <div class="bg-white rounded-t-[40px] w-full max-w-xl p-8 relative modal-sheet flex flex-col items-center text-center">
+            <div class="w-12 h-1.5 bg-gray-200 rounded-full mb-6"></div>
+            <div class="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-600 mb-5 shadow-inner border border-blue-100">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                </svg>
+            </div>
+            <h3 class="text-xl font-black text-gray-900 mb-3 leading-tight">Install Aplikasi di <br/>iPhone / iPad</h3>
+            <div class="text-[13px] text-gray-500 mb-8 leading-relaxed space-y-3">
+                <p>1. Ketuk ikon <strong class="text-gray-800">Bagikan (Share)</strong> di menu bawah browser Anda.</p>
+                <p>2. Geser ke bawah dan pilih <br/><strong class="text-blue-600 bg-blue-50 px-2 py-1 rounded-md inline-block mt-1">"Tambah ke Layar Utama"</strong></p>
+            </div>
+            <button id="closeIosModal" class="w-full bg-blue-600 text-white rounded-[24px] py-4 font-black text-sm shadow-xl shadow-blue-100 active:scale-95 transition uppercase tracking-widest">
+                Saya Mengerti
+            </button>
         </div>
     </div>
 
@@ -490,15 +528,11 @@
             text: `*RAFFASYA MOTOR SUBANG*\n\nUnit: *${item.nama}*\n*${item.warna}*\nKilometer: *${F.formatKM(item.km)} (on going)*\nHarga OTR: *${F.formatFullRupiah(item.harga)}*\nNopol: ${item.nopol || '-'}\n\n*ESTIMASI CICILAN:*${creditText || '\n- Hubungi kami untuk detail'}\n\nInfo lanjut hubungi kami segera!`
         };
 
-        // Cek jika browser mendukung Web Share API
         if (navigator.share) {
             try {
                 await navigator.share(shareData);
-            } catch (err) {
-                // Jika user batal share, abaikan
-            }
+            } catch (err) {}
         } else {
-            // Fallback ke WhatsApp jika API tidak didukung
             window.open(`https://wa.me/?text=${encodeURIComponent(shareData.text)}`, '_blank');
         }
     }
@@ -539,12 +573,9 @@
         }, 1000);
     }
 
-    // MEMPERCEPAT LOADING DENGAN LOCAL STORAGE CACHING
     async function fetchData(isSilent = false) {
-        // 1. Cek apakah ada data cache tersimpan di perangkat pengguna
         const cachedData = localStorage.getItem('raffasya_data_cache');
         
-        // Jika ada cache, langsung tampilkan data tanpa menunggu loading Google Sheets
         if (cachedData && !isSilent) {
             try {
                 allData = JSON.parse(cachedData);
@@ -555,11 +586,9 @@
                 loading.classList.remove("hidden");
             }
         } else if (!isSilent) {
-            // Jika benar-benar baru buka web pertama kali, tampilkan loading spinner
             loading.classList.remove("hidden");
         }
 
-        // 2. Tetap ambil data terbaru di latar belakang (background)
         try {
             const res = await fetch(apiURL);
             const json = await res.json();
@@ -567,7 +596,6 @@
             
             const newData = rows.slice().reverse();
             
-            // Simpan data terbaru ke Cache HP/Laptop pengguna
             localStorage.setItem('raffasya_data_cache', JSON.stringify(newData));
             
             allData = newData;
@@ -576,7 +604,6 @@
         } catch (err) {
             console.error("Gagal update data:", err);
         } finally {
-            // Perbarui tampilan dengan data terbaru (jika ada perubahan)
             applyFilter();
             if (!isSilent) loading.classList.add("hidden");
         }
@@ -596,6 +623,67 @@
         searchInput.value = ""; sortPrice.value = ""; filterStatus.value = "";
         applyFilter();
         window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // PWA & LOGIKA INSTALL APLIKASI
+    let deferredPrompt;
+    const installAppBtn = document.getElementById('installAppBtn');
+    const iosInstallModal = document.getElementById('iosInstallModal');
+    const closeIosModal = document.getElementById('closeIosModal');
+
+    const isIos = () => /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
+    const isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone);
+
+    if (installAppBtn) {
+        installAppBtn.addEventListener('click', async () => {
+            if (isIos()) {
+                // Tampilkan Popup Panduan di iOS
+                iosInstallModal.classList.remove('hidden');
+                iosInstallModal.classList.add('flex');
+            } else if (deferredPrompt) {
+                // Tampilkan Prompt Native di Android/Desktop
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    installAppBtn.classList.add('hidden');
+                }
+                deferredPrompt = null;
+            }
+        });
+    }
+
+    if (closeIosModal) {
+        closeIosModal.addEventListener('click', () => {
+            iosInstallModal.classList.add('hidden');
+            iosInstallModal.classList.remove('flex');
+        });
+    }
+    
+    if (iosInstallModal) {
+        iosInstallModal.addEventListener('click', (e) => {
+            if (e.target === iosInstallModal) {
+                iosInstallModal.classList.add('hidden');
+                iosInstallModal.classList.remove('flex');
+            }
+        });
+    }
+
+    // Tampilkan tombol untuk pengguna iOS (jika dibuka dari browser, bukan PWA)
+    if (isIos() && !isInStandaloneMode() && installAppBtn) {
+        installAppBtn.classList.remove('hidden');
+    }
+
+    // Tangkap Event Chrome/Android Install
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        if (installAppBtn) installAppBtn.classList.remove('hidden');
+    });
+
+    // Sembunyikan tombol kalau aplikasi sudah diinstall
+    window.addEventListener('appinstalled', () => {
+        deferredPrompt = null;
+        if (installAppBtn) installAppBtn.classList.add('hidden');
     });
 
     fetchData();
