@@ -289,7 +289,8 @@
         return { nama, nopol, warna, harga, status, bulan, km, bank, photos, rawIndex: index };
     }
 
-    function applyFilter() {
+    // Fungsi applyFilter dimodifikasi agar bisa mempertahankan state scroll & jumlah data yang sudah dimuat
+    function applyFilter(preserveState = false, prevCount = 0) {
         const source = allData.map((item, idx) => keyMap(item, idx));
         filteredData = source.filter(x => {
             const search = searchText.toLowerCase();
@@ -310,22 +311,43 @@
         const booking = filteredData.filter(x => x.status === 'BOOKING').length;
         const comingsoon = filteredData.filter(x => x.status === 'COMING SOON').length;
 
-        totalInfo.innerHTML = `
-            <div class="READY status-badge shadow-sm whitespace-nowrap shrink-0 snap-start">READY ${ready}</div>
-            <div class="BOOKING status-badge shadow-sm whitespace-nowrap shrink-0 snap-start">BOOKING ${booking}</div>
-            <div class="COMING SOON status-badge shadow-sm whitespace-nowrap shrink-0 snap-start">COMING SOON ${comingsoon}</div>
-        `;
+        if (totalInfo) {
+            totalInfo.innerHTML = `
+                <div class="READY status-badge shadow-sm whitespace-nowrap shrink-0 snap-start">READY ${ready}</div>
+                <div class="BOOKING status-badge shadow-sm whitespace-nowrap shrink-0 snap-start">BOOKING ${booking}</div>
+                <div class="COMING SOON status-badge shadow-sm whitespace-nowrap shrink-0 snap-start">COMING SOON ${comingsoon}</div>
+            `;
+        }
 
-        listContainer.innerHTML = "";
-        currentIndex = 0;
-        endMessage.classList.add("hidden");
-        loadMore();
+        if (preserveState) {
+            // Amankan posisi scroll saat ini
+            const scrollPos = window.scrollY;
+            
+            listContainer.innerHTML = "";
+            currentIndex = 0;
+            if (endMessage) endMessage.classList.add("hidden");
+            
+            // Muat sekaligus sebanyak item yang sebelumnya sudah diload agar tidak mereset ke 10
+            const tempPerLoad = perLoad;
+            perLoad = prevCount > 0 ? prevCount : tempPerLoad;
+            loadMore();
+            perLoad = tempPerLoad; // Kembalikan ke perLoad standar (10) untuk scroll berikutnya
+            
+            // Kembalikan posisi scroll agar pengguna tidak terlempar ke atas
+            window.scrollTo(0, scrollPos);
+        } else {
+            // Reset normal jika pengguna mengetik di kolom pencarian / ganti filter
+            listContainer.innerHTML = "";
+            currentIndex = 0;
+            if (endMessage) endMessage.classList.add("hidden");
+            loadMore();
+        }
     }
 
     function loadMore() {
         if (isLoading) return;
         isLoading = true;
-        loading.classList.remove("hidden");
+        if (loading) loading.classList.remove("hidden");
 
         const nextData = filteredData.slice(currentIndex, currentIndex + perLoad);
         
@@ -397,10 +419,10 @@
         initLazyLoad();
         currentIndex += perLoad;
         isLoading = false;
-        loading.classList.add("hidden");
+        if (loading) loading.classList.add("hidden");
 
         if (currentIndex >= filteredData.length && filteredData.length > 0) {
-            endMessage.classList.remove("hidden");
+            if (endMessage) endMessage.classList.remove("hidden");
         }
     }
 
@@ -578,20 +600,21 @@
         }, 1000);
     }
 
+    // Fungsi fetchData dimodifikasi untuk background refresh yang cerdas
     async function fetchData(isSilent = false) {
         const cachedData = localStorage.getItem('raffasya_data_cache');
         
-        if (cachedData && !isSilent) {
+        if (cachedData && !isSilent && allData.length === 0) {
             try {
                 allData = JSON.parse(cachedData);
                 applyFilter();
                 if (refreshTimerEl) refreshTimerEl.innerText = "Memeriksa data baru...";
             } catch (e) {
                 console.error("Gagal membaca cache:", e);
-                loading.classList.remove("hidden");
+                if (loading) loading.classList.remove("hidden");
             }
-        } else if (!isSilent) {
-            loading.classList.remove("hidden");
+        } else if (!isSilent && allData.length === 0) {
+            if (loading) loading.classList.remove("hidden");
         }
 
         try {
@@ -601,16 +624,34 @@
             
             const newData = rows.slice().reverse();
             
-            localStorage.setItem('raffasya_data_cache', JSON.stringify(newData));
+            // CEK KOMPARASI DATA: Jika data dari server identik, sistem tidak akan menggambar ulang HTML (Mencegah kedip / scroll jump)
+            const isDataChanged = JSON.stringify(newData) !== JSON.stringify(allData);
             
-            allData = newData;
-            const now = new Date();
-            lastUpdateEl.innerText = `${now.getHours()}:${now.getMinutes().toString().padStart(2, '0')}`;
+            if (isDataChanged || !isSilent) {
+                localStorage.setItem('raffasya_data_cache', JSON.stringify(newData));
+                allData = newData;
+                
+                const now = new Date();
+                if (lastUpdateEl) lastUpdateEl.innerText = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+                
+                if (isSilent) {
+                    // Jika diam-diam tapi ada data baru, update dan simpan jumlah list yang sudah pernah di-scroll
+                    const prevCount = Math.max(currentIndex, perLoad);
+                    applyFilter(true, prevCount);
+                } else {
+                    // Jika refresh awal atau pencarian manual
+                    applyFilter(false);
+                }
+            } else {
+                // Jika data SAMA PERSIS dan refresh secara diam-diam, perbarui timestamp saja (Super Smooth / Tanpa Gangguan)
+                const now = new Date();
+                if (lastUpdateEl) lastUpdateEl.innerText = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+            }
+
         } catch (err) {
             console.error("Gagal update data:", err);
         } finally {
-            applyFilter();
-            if (!isSilent) loading.classList.add("hidden");
+            if (!isSilent && loading) loading.classList.add("hidden");
         }
     }
 
